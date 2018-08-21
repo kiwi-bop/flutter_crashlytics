@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FlutterCrashlytics {
-  static const MethodChannel _channel = const MethodChannel('flutter_crashlytics');
+  static const MethodChannel _channel =
+      const MethodChannel('flutter_crashlytics');
   static final FlutterCrashlytics _singleton = FlutterCrashlytics._internal();
 
   factory FlutterCrashlytics() => _singleton;
@@ -38,7 +39,12 @@ class FlutterCrashlytics {
         results.add([traceClass, traceMethod, traceFile, traceLine]);
       }
     }
-    final data = {'name': name, 'cause': trace[1], 'message': trace[0], 'trace': results};
+    final data = {
+      'name': name,
+      'cause': trace[1],
+      'message': trace[0],
+      'trace': results
+    };
     return await _channel.invokeMethod('reportCrash', data);
   }
 
@@ -51,10 +57,11 @@ class FlutterCrashlytics {
   }
 
   Future<void> setInfo(String key, dynamic info) async {
-    return await _channel.invokeMethod('setInfo', {"key":key, "value": info});
+    return await _channel.invokeMethod('setInfo', {"key": key, "value": info});
   }
 
   Future<void> setUserInfo(String identifier, String email, String name) async {
-    return await _channel.invokeMethod('setUserInfo', {"id": identifier, "email": email, "name": name});
+    return await _channel.invokeMethod(
+        'setUserInfo', {"id": identifier, "email": email, "name": name});
   }
 }
