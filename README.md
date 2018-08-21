@@ -79,9 +79,5 @@ FlutterError.onError = (FlutterErrorDetails details) async {
 ## Limitation 
 This plugin uses Crashlytics sdk to log manually dart crashes, all manual logged crashes are tagged as non fatal under Crashlytics, that's a limitation of the SDK.
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
-
-For help on editing plugin code, view the [documentation](https://flutter.io/developing-packages/#edit-plugin-package).
+## Contribution
+We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin 
