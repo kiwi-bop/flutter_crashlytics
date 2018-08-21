@@ -13,7 +13,7 @@ To setup Crashlytics on Android side, you need to set under your manifest the Fa
             android:value="YOUR_ID_HERE" />
 ```
 
-You also need to to change you build.gradle file like: 
+You also need to change you build.gradle file like: 
 
 ```
 buildscript {
@@ -55,6 +55,9 @@ On iOS side your need to set your Fabric ID under your Info.plist like:
 
 Then on your Podfile add `use_frameworks!`
 
+Don't forget to add your `Run Script` step on the build phases tab: 
+![ios run script](https://github.com/kiwi-bop/flutter_crashlytics/raw/master/iosScript.jpg "ios run script") 
+
 That's it :)
 
 ### Flutter 
@@ -68,13 +71,13 @@ FlutterError.onError = (FlutterErrorDetails details) async {
   };
 ```
 
-### API available
+## API available
 - Add log to crash reporting with `log(String msg, {int priority, String tag})`
 - Add user info to crash reporting with `setUserInfo(String identifier, String email, String name)`
 - Add general info to crash reporting with  `setInfo(String key, dyncamic value)`
 
-### Limitation 
-This plugin use Crashlytics sdk to log manually dart crashed, all manual logged crashes are tagged as non fatal under crashlytics, that's a limitation of the SDK.
+## Limitation 
+This plugin uses Crashlytics sdk to log manually dart crashes, all manual logged crashes are tagged as non fatal under Crashlytics, that's a limitation of the SDK.
 
 ## Getting Started
 
