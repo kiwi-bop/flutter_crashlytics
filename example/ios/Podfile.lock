@@ -1,0 +1,34 @@
+PODS:
+  - Crashlytics (3.10.5):
+    - Fabric (~> 1.7.9)
+  - Fabric (1.7.9)
+  - Flutter (1.0.0)
+  - flutter_crashlytics (0.0.1):
+    - Crashlytics
+    - Fabric
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_crashlytics (from `.symlinks/plugins/flutter_crashlytics/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Crashlytics
+    - Fabric
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  flutter_crashlytics:
+    :path: ".symlinks/plugins/flutter_crashlytics/ios"
+
+SPEC CHECKSUMS:
+  Crashlytics: 7f2e38d302d9da96475b3d64d86fb29e31a542b7
+  Fabric: a2917d3895e4c1569b9c3170de7320ea1b1e6661
+  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  flutter_crashlytics: 753059d75232a519279a515b51e01e7f784e5385
+
+PODFILE CHECKSUM: ac8aca132925cdff4493e5b19d72732202854236
+
+COCOAPODS: 1.5.3
