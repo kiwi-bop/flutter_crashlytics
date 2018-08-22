@@ -1,3 +1,7 @@
+## 0.0.4
+
+* add ability to force a crash when a flutter exception append to force a fatal error.
+
 ## 0.0.3
 
 * update package info.

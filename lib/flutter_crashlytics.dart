@@ -23,7 +23,8 @@ class FlutterCrashlytics {
     multiLine: false,
   );
 
-  Future<void> onError(FlutterErrorDetails details) async {
+  Future<void> onError(FlutterErrorDetails details,
+      {bool forceCrash = false}) async {
     final trace = details.toString().split('\n');
     final name = regexpName.firstMatch(trace[1]).group(0).trim();
     final results = [];
@@ -43,7 +44,8 @@ class FlutterCrashlytics {
       'name': name,
       'cause': trace[1],
       'message': trace[0],
-      'trace': results
+      'trace': results,
+      'forceCrash': forceCrash
     };
     return await _channel.invokeMethod('reportCrash', data);
   }

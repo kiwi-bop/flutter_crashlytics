@@ -67,9 +67,11 @@ Under your `main` method, add:
 
 ```
 FlutterError.onError = (FlutterErrorDetails details) async {
-    await FlutterCrashlytics().onError(details);
+    await FlutterCrashlytics().onError(details, forceCrash: true);
   };
 ```
+
+`forceCrash` allow you to have a real crash instead of the red screen, in that case the exception will tagged as fatal 
 
 ## API available
 - Add log to crash reporting with `log(String msg, {int priority, String tag})`
@@ -78,6 +80,10 @@ FlutterError.onError = (FlutterErrorDetails details) async {
 
 ## Limitation 
 This plugin uses Crashlytics sdk to log manually dart crashes, all manual logged crashes are tagged as non fatal under Crashlytics, that's a limitation of the SDK.
+
+You can bypass that limitation with the `forceCrash` parameter, instead of the red screen an actual crash will append, the crash will be tagged as Fatal.
+
+On iOS fatal crash has there dart stacktrace under the `Logs` tab of Crashlytics, that's a limitation of iOS that prevent developers to set a custom stacktrace to an exception. 
 
 ## Contribution
 We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin 

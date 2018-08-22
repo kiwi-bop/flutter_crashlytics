@@ -1,7 +1,10 @@
 package com.kiwi.fluttercrashlytics
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -10,7 +13,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 
-class FlutterCrashlyticsPlugin(context: Context) : MethodCallHandler {
+class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandler {
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
@@ -63,19 +66,24 @@ class FlutterCrashlyticsPlugin(context: Context) : MethodCallHandler {
             }
             call.method == "reportCrash" -> {
                 val exception = (call.arguments as Map<String, Any>)
+                val forceCrash = exception["forceCrash"] as? Boolean ?: false
                 val cause = exception["cause"] as? String
                 val message = exception["message"] as? String
                 val traces = exception["trace"] as? List<List<Any>>
-                val stack: MutableList<StackTraceElement> = mutableListOf()
 
-                traces?.forEach {
-                    stack.add(StackTraceElement(it[0] as? String ?: "", it[1] as? String
-                            ?: "", it[2] as? String ?: "", it[3] as Int))
+                val throwable = Utils.createException(exception)
+
+                if(forceCrash) {
+                    //Start a new activity to not crash directly under onMethod call, or it will crash JNI instead of a clean exception
+                    val intent = Intent(context, CrashActivity::class.java)
+                    intent.putExtra("trace", traces?.toTypedArray())
+                    intent.putExtra("cause", cause)
+                    intent.putExtra("message", message)
+                    context.startActivityForResult(intent, -1)
                 }
-                val throwable = FlutterException("$message\n$cause")
-                throwable.stackTrace = stack.toTypedArray()
-
-                core.logException(throwable)
+                else {
+                    core.logException(throwable)
+                }
                 result.success(null)
             }
             else -> result.notImplemented()
