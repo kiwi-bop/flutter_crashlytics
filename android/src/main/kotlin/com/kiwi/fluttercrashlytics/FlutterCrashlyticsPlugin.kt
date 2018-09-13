@@ -1,10 +1,8 @@
 package com.kiwi.fluttercrashlytics
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -36,6 +34,13 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
                     val info = call.arguments as List<Any>
                     core.log(info[0] as Int, info[1] as String, info[2] as String)
                 }
+                result.success(null)
+            }
+            call.method == "logException" -> {
+                val exception = (call.arguments as Map<String, Any>)
+
+                core.logException(Utils.create(exception))
+
                 result.success(null)
             }
             call.method == "setInfo" -> {

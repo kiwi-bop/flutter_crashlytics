@@ -5,6 +5,7 @@ author: jaumard <jimmy@kiwi-bop.com>
 homepage: https://github.com/kiwi-bop/flutter_crashlytics
 
 dependencies:
+  stack_trace: ^1.9.3
   flutter:
     sdk: flutter
 
