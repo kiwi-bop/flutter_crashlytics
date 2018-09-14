@@ -1,3 +1,7 @@
+## 0.0.5
+
+* fix empty crash report in release mode.
+
 ## 0.0.4
 
 * add ability to force a crash when a flutter exception append to force a fatal error.
