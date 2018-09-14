@@ -13,7 +13,7 @@ class FlutterCrashlytics {
   FlutterCrashlytics._internal();
 
   final regexp = RegExp(
-    '([a-zA-Z ]+)(?:\\.(.*))?\\([a-zA-Z:/_]+\\/([0-9a-zA-Z_-]+.dart):([0-9]+):',
+    '([a-zA-Z ]+)(?:\\.(.*))?\\([a-zA-Z:/_]+\\/([0-9a-zA-Z_-]+.dart):([0-9]+):?',
     caseSensitive: false,
     multiLine: false,
   );
