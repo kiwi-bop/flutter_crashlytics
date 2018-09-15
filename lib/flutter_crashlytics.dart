@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 class FlutterCrashlytics {
-  static const MethodChannel _channel =
-  const MethodChannel('flutter_crashlytics');
+  static const MethodChannel _channel = const MethodChannel('flutter_crashlytics');
   static final FlutterCrashlytics _singleton = FlutterCrashlytics._internal();
 
   factory FlutterCrashlytics() => _singleton;
@@ -71,7 +70,7 @@ class FlutterCrashlytics {
   ///
   /// ```dart
   /// try {
-  ///     // Code throwing en exception
+  ///     // Code throwing an exception
   /// } on Exception catch (e, s) {
   ///     FlutterCrashlytics().logException(e, s);
   /// }
