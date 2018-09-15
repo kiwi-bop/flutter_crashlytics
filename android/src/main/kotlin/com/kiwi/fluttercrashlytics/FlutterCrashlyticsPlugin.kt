@@ -37,9 +37,7 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
                 result.success(null)
             }
             call.method == "logException" -> {
-                val exception = (call.arguments as Map<String, Any>)
-
-                core.logException(Utils.create(exception))
+                core.logException(Utils.create(call.arguments as Map<String, Any>))
 
                 result.success(null)
             }
@@ -72,18 +70,15 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
             call.method == "reportCrash" -> {
                 val exception = (call.arguments as Map<String, Any>)
                 val forceCrash = exception["forceCrash"] as? Boolean ?: false
-                val cause = exception["cause"] as? String
-                val message = exception["message"] as? String
-                val traces = exception["trace"] as? List<List<Any>>
 
-                val throwable = Utils.createException(exception)
+                val throwable = Utils.create(exception)
 
                 if(forceCrash) {
                     //Start a new activity to not crash directly under onMethod call, or it will crash JNI instead of a clean exception
-                    val intent = Intent(context, CrashActivity::class.java)
-                    intent.putExtra("trace", traces?.toTypedArray())
-                    intent.putExtra("cause", cause)
-                    intent.putExtra("message", message)
+                    val intent = Intent(context, CrashActivity::class.java).apply {
+                        putExtra("exception", throwable)
+                    }
+
                     context.startActivityForResult(intent, -1)
                 }
                 else {

@@ -11,14 +11,7 @@ class CrashActivity : Activity() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
-        val cause = intent.getStringExtra("cause")
-        val message = intent.getStringExtra("message")
-        val traces: List<List<Any>> = (intent.extras.getSerializable("trace") as? Array<List<Any>> ?: arrayOf()).toList()
 
-        val data = HashMap<String, Any>()
-        data["cause"] = cause
-        data["message"] = message
-        data["trace"] = traces
-        throw Utils.createException(data)
+        throw intent.getSerializableExtra("exception") as Throwable
     }
 }

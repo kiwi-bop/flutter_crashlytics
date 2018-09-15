@@ -13,41 +13,14 @@ class FlutterCrashlytics {
 
   FlutterCrashlytics._internal();
 
-  final regexp = RegExp(
-    '([a-zA-Z ]+)(?:\\.(.*))?\\([a-zA-Z:/_]+\\/([0-9a-zA-Z_-]+.dart):([0-9]+):?',
-    caseSensitive: false,
-    multiLine: false,
-  );
-  final regexpName = RegExp(
-    '([a-zA-Z]+) ',
-    caseSensitive: false,
-    multiLine: false,
-  );
-
   Future<void> onError(FlutterErrorDetails details,
       {bool forceCrash = false}) async {
-    final trace = details.toString().split('\n');
-    final name = regexpName.firstMatch(trace[1]).group(0).trim();
-    final results = [];
-
-    for (var i = 2; i < trace.length; ++i) {
-      var line = trace[i];
-      final matches = regexp.allMatches(line).toList();
-      if (matches.length == 1) {
-        final traceClass = matches[0].group(1)?.trim();
-        final traceMethod = matches[0].group(2)?.trim();
-        final traceFile = matches[0].group(3)?.trim();
-        final traceLine = int.tryParse(matches[0].group(4)) ?? 0;
-        results.add([traceClass, traceMethod, traceFile, traceLine]);
-      }
-    }
     final data = {
-      'name': name,
-      'cause': trace[1],
-      'message': trace[0],
-      'trace': results,
+      'message': details.exception.toString(),
+      'trace': _traces(details.stack),
       'forceCrash': forceCrash
     };
+
     return await _channel.invokeMethod('reportCrash', data);
   }
 
@@ -68,10 +41,33 @@ class FlutterCrashlytics {
         'setUserInfo', {"id": identifier, "email": email, "name": name});
   }
 
+  /// Reports an Error to Craslytics.
+  /// A good rule of thumb is not to catch Errors as those are errors that occur
+  /// in the development phase.
+  ///
+  /// This method provides the option In case you want to catch them anyhow.
+  ///
+  ///
+  /// ```dart
+  /// try {
+  ///     // Code throwing an error
+  /// } on Error catch (e) {
+  ///     FlutterCrashlytics().logError(e);
+  /// }
+  /// ```
+  Future<void> logError(Error error) async {
+    assert(error != null);
+
+    final data = {
+      'message': error.toString(),
+      'trace': _traces(error.stackTrace),
+    };
+
+    return await _channel.invokeMethod('logException', data);
+  }
+
   /// Reports an Exception to Craslytics together with the stacktrace.
   /// Both fields are mandatory.
-  ///
-  /// As Errors should not be cougth those are not supported.
   ///
   /// ```dart
   /// try {
