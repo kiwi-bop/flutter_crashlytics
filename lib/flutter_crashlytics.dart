@@ -16,6 +16,7 @@ class FlutterCrashlytics {
       {bool forceCrash = false}) async {
     final data = {
       'message': details.exception.toString(),
+      'cause': _cause(details.stack),
       'trace': _traces(details.stack),
       'forceCrash': forceCrash
     };
@@ -57,12 +58,7 @@ class FlutterCrashlytics {
   Future<void> logError(Error error) async {
     assert(error != null);
 
-    final data = {
-      'message': error.toString(),
-      'trace': _traces(error.stackTrace),
-    };
-
-    return await _channel.invokeMethod('logException', data);
+    return await _logException(error.toString(), error.stackTrace);
   }
 
   /// Reports an Exception to Craslytics together with the stacktrace.
@@ -79,8 +75,13 @@ class FlutterCrashlytics {
     assert(exception != null);
     assert(stack != null);
 
+    return await _logException(exception.toString(), stack);
+  }
+
+  Future<void> _logException(String message, StackTrace stack) async {
     final data = {
-      'message': exception.toString(),
+      'cause': _cause(stack),
+      'message': message,
       'trace': _traces(stack),
     };
 
@@ -94,17 +95,24 @@ class FlutterCrashlytics {
           .map(_toTrace)
           .toList(growable: false);
 
+  String _cause(StackTrace stack) =>
+      Trace
+          .from(stack)
+          .frames
+          .first
+          .toString();
+
   Map<String, dynamic> _toTrace(Frame frame) {
     final List<String> tokens = frame.member.split('.');
 
     return {
       'library': frame.library,
       'line': frame.line,
-      // Gobal function might have thrown the exception.
+      // Global function might have thrown the exception.
       // So in some cases the method is the first token
       'method': tokens.length == 1 ? tokens[0] : tokens.sublist(1).join(
           '.'),
-      // Gobal function might have thrown the exception.
+      // Global function might have thrown the exception.
       // So in some cases class does not exist
       'class': tokens.length == 1 ? null : tokens[0],
     };
