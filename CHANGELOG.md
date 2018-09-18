@@ -1,3 +1,8 @@
+## 0.0.6
+
+* add manual log for Error/Exception
+* support for Zone 
+
 ## 0.0.5
 
 * fix empty crash report in release mode.

@@ -63,18 +63,38 @@ That's it :)
 ### Flutter 
 All you need to do under your code is to let the plugin handle the Flutter crashes.
 
-Under your `main` method, add:
+Your `main` method should look like:
 
 ```
-FlutterError.onError = (FlutterErrorDetails details) async {
-    await FlutterCrashlytics().onError(details, forceCrash: true);
+void main() {
+  bool isInDebugMode = false;
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (isInDebugMode) {
+      // In development mode simply print to console.
+      FlutterError.dumpErrorToConsole(details);
+    } else {
+      // In production mode report to the application zone to report to
+      // Crashlytics.
+      Zone.current.handleUncaughtError(details.exception, details.stack);
+    }
   };
+
+  runZoned<Future<Null>>(() async {
+    runApp(MyApp());
+  }, onError: (error, stackTrace) async {
+    // Whenever an error occurs, call the `reportCrash` function. This will send
+    // Dart errors to our dev console or Crashlytics depending on the environment.
+    await FlutterCrashlytics().reportCrash(error, stackTrace, forceCrash: false);
+  });
+}
 ```
 
 `forceCrash` allow you to have a real crash instead of the red screen, in that case the exception will tagged as fatal 
 
 ## API available
 - Add log to crash reporting with `log(String msg, {int priority, String tag})`
+- Add manual log to crash reporting with `logException(Error/Exception exception, Stacktrace stack)`
 - Add user info to crash reporting with `setUserInfo(String identifier, String email, String name)`
 - Add general info to crash reporting with  `setInfo(String key, dyncamic value)`
 
