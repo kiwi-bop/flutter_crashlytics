@@ -42,8 +42,8 @@ class FlutterCrashlytics {
     return await _channel.invokeMethod('reportCrash', data);
   }
 
-  Future<void> logCrash(dynamic error, StackTrace stackTrace) {
-    return reportCrash(error, stackTrace);
+  Future<void> logException(dynamic exception, StackTrace stackTrace) {
+    return reportCrash(exception, stackTrace);
   }
 
   Future<void> log(String msg, {int priority, String tag}) async {

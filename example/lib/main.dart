@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
                     debugPrint(crash);
                   } catch (error) {
                     debugPrint(error.toString());
-                    FlutterCrashlytics().logCrash(error, error.stackTrace);
+                    FlutterCrashlytics().logException(error, error.stackTrace);
                   }
                 },
                 child: Text('Manual error log'),
@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                     throw new FormatException();
                   } catch (exception, stack) {
                     debugPrint(exception.toString());
-                    FlutterCrashlytics().logCrash(exception, stack);
+                    FlutterCrashlytics().logException(exception, stack);
                   }
                 },
                 child: Text('Manual exception log'),

@@ -94,7 +94,7 @@ void main() {
 
 ## API available
 - Add log to crash reporting with `log(String msg, {int priority, String tag})`
-- Add manual log to crash reporting with `logCrash(Error/Exception crash, Stacktrace stack)`
+- Add manual log to crash reporting with `logException(Error/Exception exception, Stacktrace stack)`
 - Add user info to crash reporting with `setUserInfo(String identifier, String email, String name)`
 - Add general info to crash reporting with  `setInfo(String key, dyncamic value)`
 
