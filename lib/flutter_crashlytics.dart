@@ -12,6 +12,12 @@ class FlutterCrashlytics {
 
   FlutterCrashlytics._internal();
 
+  /// Reports an Error to Craslytics.
+  /// A good rule of thumb is not to catch Errors as those are errors that occur
+  /// in the development phase.
+  ///
+  /// This method provides the option In case you want to catch them anyhow.
+  /// @deprecated please use reportCrash
   Future<void> onError(FlutterErrorDetails details,
       {bool forceCrash = false}) async {
     final data = {
@@ -22,6 +28,22 @@ class FlutterCrashlytics {
     };
 
     return await _channel.invokeMethod('reportCrash', data);
+  }
+
+  Future<void> reportCrash(dynamic error, StackTrace stackTrace,
+      {bool forceCrash = false}) async {
+    final data = {
+      'message': error.toString(),
+      'cause': _cause(stackTrace),
+      'trace': _traces(stackTrace),
+      'forceCrash': forceCrash
+    };
+
+    return await _channel.invokeMethod('reportCrash', data);
+  }
+
+  Future<void> logCrash(dynamic error, StackTrace stackTrace) {
+    return reportCrash(error, stackTrace);
   }
 
   Future<void> log(String msg, {int priority, String tag}) async {
@@ -39,53 +61,6 @@ class FlutterCrashlytics {
   Future<void> setUserInfo(String identifier, String email, String name) async {
     return await _channel.invokeMethod(
         'setUserInfo', {"id": identifier, "email": email, "name": name});
-  }
-
-  /// Reports an Error to Craslytics.
-  /// A good rule of thumb is not to catch Errors as those are errors that occur
-  /// in the development phase.
-  ///
-  /// This method provides the option In case you want to catch them anyhow.
-  ///
-  ///
-  /// ```dart
-  /// try {
-  ///     // Code throwing an error
-  /// } on Error catch (e) {
-  ///     FlutterCrashlytics().logError(e);
-  /// }
-  /// ```
-  Future<void> logError(Error error) async {
-    assert(error != null);
-
-    return await _logException(error.toString(), error.stackTrace);
-  }
-
-  /// Reports an Exception to Craslytics together with the stacktrace.
-  /// Both fields are mandatory.
-  ///
-  /// ```dart
-  /// try {
-  ///     // Code throwing an exception
-  /// } on Exception catch (e, s) {
-  ///     FlutterCrashlytics().logException(e, s);
-  /// }
-  /// ```
-  Future<void> logException(Exception exception, StackTrace stack) async {
-    assert(exception != null);
-    assert(stack != null);
-
-    return await _logException(exception.toString(), stack);
-  }
-
-  Future<void> _logException(String message, StackTrace stack) async {
-    final data = {
-      'cause': _cause(stack),
-      'message': message,
-      'trace': _traces(stack),
-    };
-
-    return await _channel.invokeMethod('logException', data);
   }
 
   List<Map<String, dynamic>> _traces(StackTrace stack) =>

@@ -263,7 +263,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		BD1B5E15212AF155008AE385 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -277,7 +277,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 0ecf6f1d8aec954ebf0353ca3071844a2e266bf1 f8e7f5e8046effe99a6c0176aae4ebd7ecd65cb7daf724fb98a614aaecbf77df";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 0ecf6f1d8aec954ebf0353ca3071844a2e266bf1 f8e7f5e8046effe99a6c0176aae4ebd7ecd65cb7daf724fb98a614aaecbf77df\n";
 		};
 		F09C6AA88774EB820C60EB78 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

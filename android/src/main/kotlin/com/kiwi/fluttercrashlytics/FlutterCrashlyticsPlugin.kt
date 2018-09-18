@@ -36,11 +36,6 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
                 }
                 result.success(null)
             }
-            call.method == "logException" -> {
-                core.logException(Utils.create(call.arguments as Map<String, Any>))
-
-                result.success(null)
-            }
             call.method == "setInfo" -> {
                 val info = call.arguments as Map<String, Any>
                 when (info["value"]) {
