@@ -2,51 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 class FlutterCrashlytics {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_crashlytics');
+  static const MethodChannel _channel = const MethodChannel('flutter_crashlytics');
   static final FlutterCrashlytics _singleton = FlutterCrashlytics._internal();
 
   factory FlutterCrashlytics() => _singleton;
 
   FlutterCrashlytics._internal();
 
-  final regexp = RegExp(
-    '([a-zA-Z ]+)(?:\\.(.*))?\\([a-zA-Z:/_]+\\/([0-9a-zA-Z_-]+.dart):([0-9]+):?',
-    caseSensitive: false,
-    multiLine: false,
-  );
-  final regexpName = RegExp(
-    '([a-zA-Z]+) ',
-    caseSensitive: false,
-    multiLine: false,
-  );
-
   Future<void> onError(FlutterErrorDetails details,
       {bool forceCrash = false}) async {
-    final trace = details.toString().split('\n');
-    final name = regexpName.firstMatch(trace[1]).group(0).trim();
-    final results = [];
-
-    for (var i = 2; i < trace.length; ++i) {
-      var line = trace[i];
-      final matches = regexp.allMatches(line).toList();
-      if (matches.length == 1) {
-        final traceClass = matches[0].group(1)?.trim();
-        final traceMethod = matches[0].group(2)?.trim();
-        final traceFile = matches[0].group(3)?.trim();
-        final traceLine = int.tryParse(matches[0].group(4)) ?? 0;
-        results.add([traceClass, traceMethod, traceFile, traceLine]);
-      }
-    }
     final data = {
-      'name': name,
-      'cause': trace[1],
-      'message': trace[0],
-      'trace': results,
+      'message': details.exception.toString(),
+      'cause': _cause(details.stack),
+      'trace': _traces(details.stack),
       'forceCrash': forceCrash
     };
+
     return await _channel.invokeMethod('reportCrash', data);
   }
 
@@ -66,4 +40,82 @@ class FlutterCrashlytics {
     return await _channel.invokeMethod(
         'setUserInfo', {"id": identifier, "email": email, "name": name});
   }
+
+  /// Reports an Error to Craslytics.
+  /// A good rule of thumb is not to catch Errors as those are errors that occur
+  /// in the development phase.
+  ///
+  /// This method provides the option In case you want to catch them anyhow.
+  ///
+  ///
+  /// ```dart
+  /// try {
+  ///     // Code throwing an error
+  /// } on Error catch (e) {
+  ///     FlutterCrashlytics().logError(e);
+  /// }
+  /// ```
+  Future<void> logError(Error error) async {
+    assert(error != null);
+
+    return await _logException(error.toString(), error.stackTrace);
+  }
+
+  /// Reports an Exception to Craslytics together with the stacktrace.
+  /// Both fields are mandatory.
+  ///
+  /// ```dart
+  /// try {
+  ///     // Code throwing an exception
+  /// } on Exception catch (e, s) {
+  ///     FlutterCrashlytics().logException(e, s);
+  /// }
+  /// ```
+  Future<void> logException(Exception exception, StackTrace stack) async {
+    assert(exception != null);
+    assert(stack != null);
+
+    return await _logException(exception.toString(), stack);
+  }
+
+  Future<void> _logException(String message, StackTrace stack) async {
+    final data = {
+      'cause': _cause(stack),
+      'message': message,
+      'trace': _traces(stack),
+    };
+
+    return await _channel.invokeMethod('logException', data);
+  }
+
+  List<Map<String, dynamic>> _traces(StackTrace stack) =>
+      Trace
+          .from(stack)
+          .frames
+          .map(_toTrace)
+          .toList(growable: false);
+
+  String _cause(StackTrace stack) =>
+      Trace
+          .from(stack)
+          .frames
+          .first
+          .toString();
+
+  Map<String, dynamic> _toTrace(Frame frame) {
+    final List<String> tokens = frame.member.split('.');
+
+    return {
+      'library': frame.library,
+      'line': frame.line,
+      // Global function might have thrown the exception.
+      // So in some cases the method is the first token
+      'method': tokens.length == 1 ? tokens[0] : tokens.sublist(1).join(
+          '.'),
+      // Global function might have thrown the exception.
+      // So in some cases class does not exist
+      'class': tokens.length == 1 ? null : tokens[0],
+    };
+  }
+
 }
