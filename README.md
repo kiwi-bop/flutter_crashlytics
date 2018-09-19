@@ -4,9 +4,16 @@ Flutter plugin to enable Crashlytics reporting.
 
 ## Setup
 
+### Firebase Crashlytics
+
+If using Firebase instead of Fabric, you must first setup your app to use firebase as per this tutorial
+https://codelabs.developers.google.com/codelabs/flutter-firebase/#4
+
+The instructions are the same for Fabric and Firebase, except that for Firebase, you do not get an Api key so you do not have to add it anywhere.
+
 ### Android
 To setup Crashlytics on Android side, you need to set under your manifest the Fabric ID like: 
-
+(Only do this if using Fabric, not firebase as you will not have an Api Key)
 ```
  <meta-data
             android:name="io.fabric.ApiKey"
@@ -35,7 +42,7 @@ Nothing more.
 
 ### iOS
 On iOS side your need to set your Fabric ID under your Info.plist like: 
-
+(Only do this if using Fabric, not firebase as you will not have an Api Key)
 ```
 <key>Fabric</key>
     <dict>
@@ -55,8 +62,14 @@ On iOS side your need to set your Fabric ID under your Info.plist like:
 
 Then on your Podfile add `use_frameworks!`
 
-Don't forget to add your `Run Script` step on the build phases tab: 
+Don't forget to add your `Run Script` step (with any version of Xcode) on the build phases tab and, if using `Xcode 10`, only then must you add your app's built Info.plist location to the Build Phase's Input Files field:
+```
+$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
+```
+
 ![ios run script](https://github.com/kiwi-bop/flutter_crashlytics/raw/master/iosScript.jpg "ios run script") 
+
+
 
 That's it :)
 
