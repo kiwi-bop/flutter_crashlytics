@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 
 void main() {
   bool isInDebugMode = false;
+  profile((){
+    isInDebugMode=true;
+  });
 
   FlutterError.onError = (FlutterErrorDetails details) {
     if (isInDebugMode) {
