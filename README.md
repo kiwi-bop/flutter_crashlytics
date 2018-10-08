@@ -93,6 +93,8 @@ void main() {
     }
   };
 
+  await FlutterCrashlytics().initialise();
+
   runZoned<Future<Null>>(() async {
     runApp(MyApp());
   }, onError: (error, stackTrace) async {
@@ -119,4 +121,4 @@ You can bypass that limitation with the `forceCrash` parameter, instead of the r
 On iOS fatal crash has there dart stacktrace under the `Logs` tab of Crashlytics, that's a limitation of iOS that prevent developers to set a custom stacktrace to an exception. 
 
 ## Contribution
-We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin 
+We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin.

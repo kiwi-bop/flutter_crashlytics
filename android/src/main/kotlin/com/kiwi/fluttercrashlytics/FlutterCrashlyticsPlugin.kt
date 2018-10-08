@@ -20,11 +20,25 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
         }
     }
 
-    init {
-        Fabric.with(context, Crashlytics())
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+            "initialise" -> {
+                Fabric.with(context, Crashlytics())
+
+                result.success(null)
+            }
+            else -> {
+                if (Fabric.isInitialized()) {
+                    onInitialisedMethodCall(call, result)
+                } else {
+                    // Should not result in an error. Otherwise Opt Out clients would need to handle errors
+                    result.success(null)
+                }
+            }
+        }
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
+    private fun onInitialisedMethodCall(call: MethodCall, result: Result) {
         val core = Crashlytics.getInstance().core
         when {
             call.method == "log" -> {
@@ -40,16 +54,16 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
                 val info = call.arguments as Map<String, Any>
                 when (info["value"]) {
                     is String ->
-                    core.setString(info["key"] as String, info["value"] as String)
+                        core.setString(info["key"] as String, info["value"] as String)
                     is Int ->
                         core.setInt(info["key"] as String, info["value"] as Int)
                     is Double ->
                         core.setDouble(info["key"] as String, info["value"] as Double)
-                    is  Boolean ->
+                    is Boolean ->
                         core.setBool(info["key"] as String, info["value"] as Boolean)
-                    is  Float ->
+                    is Float ->
                         core.setFloat(info["key"] as String, info["value"] as Float)
-                    is  Long ->
+                    is Long ->
                         core.setLong(info["key"] as String, info["value"] as Long)
                     else -> core.log("ignoring unknown type with key ${info["key"]} and value ${info["value"]}")
                 }
@@ -68,15 +82,14 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
 
                 val throwable = Utils.create(exception)
 
-                if(forceCrash) {
+                if (forceCrash) {
                     //Start a new activity to not crash directly under onMethod call, or it will crash JNI instead of a clean exception
                     val intent = Intent(context, CrashActivity::class.java).apply {
                         putExtra("exception", throwable)
                     }
 
                     context.startActivityForResult(intent, -1)
-                }
-                else {
+                } else {
                     core.logException(throwable)
                 }
                 result.success(null)

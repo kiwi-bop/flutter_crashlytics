@@ -21,6 +21,14 @@ void main() {
     }
   };
 
+  bool optIn = true;
+  if (optIn) {
+    await FlutterCrashlytics().initialise();
+  } else {
+    // In this case Crashlytics won't send any reports.
+    // Usually handling opt in/out is required by the Privacy Regulations
+  }
+
   runZoned<Future<Null>>(() async {
     runApp(MyApp());
   }, onError: (error, stackTrace) async {

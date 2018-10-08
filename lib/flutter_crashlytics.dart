@@ -12,6 +12,10 @@ class FlutterCrashlytics {
 
   FlutterCrashlytics._internal();
 
+  /// Initialises the Crashlytics plugin.
+  /// If you want to opt in into sending the reports please first call this method.
+  Future<void> initialise() async => await _channel.invokeMethod('initialise');
+
   /// Reports an Error to Craslytics.
   /// A good rule of thumb is not to catch Errors as those are errors that occur
   /// in the development phase.
