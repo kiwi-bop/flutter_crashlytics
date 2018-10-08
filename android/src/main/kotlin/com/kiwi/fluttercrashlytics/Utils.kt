@@ -18,5 +18,5 @@ object Utils {
             StackTraceElement(map["class"] as? String ?: "",
                               map["method"] as? String ?: "",
                               map["library"] as? String,
-                              map["line"] as Int)
+                              map["line"] as? Int?: -1)
 }
