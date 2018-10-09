@@ -60,6 +60,13 @@ On iOS side your need to set your Fabric ID under your Info.plist like:
     </dict>
 ```
 
+Turn off automatic collection with a new key to your Info.plist file (GDPR compliency if you want it):
+
+Key: firebase_crashlytics_collection_enabled
+
+Value: false
+
+
 Then on your Podfile add `use_frameworks!`
 
 Don't forget to add your `Run Script` step (with any version of Xcode) on the build phases tab and, if using `Xcode 10`, only then must you add your app's built Info.plist location to the Build Phase's Input Files field:
@@ -70,7 +77,6 @@ $(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
 ![ios run script](https://github.com/kiwi-bop/flutter_crashlytics/raw/master/iosScript.jpg "ios run script") 
 
 
-
 That's it :)
 
 ### Flutter 
@@ -79,7 +85,7 @@ All you need to do under your code is to let the plugin handle the Flutter crash
 Your `main` method should look like:
 
 ```
-void main() {
+void main() async {
   bool isInDebugMode = false;
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -92,6 +98,8 @@ void main() {
       Zone.current.handleUncaughtError(details.exception, details.stack);
     }
   };
+
+  await FlutterCrashlytics().initialize();
 
   runZoned<Future<Null>>(() async {
     runApp(MyApp());
@@ -119,4 +127,4 @@ You can bypass that limitation with the `forceCrash` parameter, instead of the r
 On iOS fatal crash has there dart stacktrace under the `Logs` tab of Crashlytics, that's a limitation of iOS that prevent developers to set a custom stacktrace to an exception. 
 
 ## Contribution
-We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin 
+We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin.
