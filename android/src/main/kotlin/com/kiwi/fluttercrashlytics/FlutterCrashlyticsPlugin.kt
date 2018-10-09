@@ -22,7 +22,7 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            "initialise" -> {
+            "initialize" -> {
                 Fabric.with(context, Crashlytics())
 
                 result.success(null)

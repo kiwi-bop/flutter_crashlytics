@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 
-void main() {
+void main() async {
   bool isInDebugMode = false;
   profile((){
     isInDebugMode=true;
@@ -23,7 +23,7 @@ void main() {
 
   bool optIn = true;
   if (optIn) {
-    await FlutterCrashlytics().initialise();
+    await FlutterCrashlytics().initialize();
   } else {
     // In this case Crashlytics won't send any reports.
     // Usually handling opt in/out is required by the Privacy Regulations

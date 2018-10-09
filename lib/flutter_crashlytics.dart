@@ -12,9 +12,9 @@ class FlutterCrashlytics {
 
   FlutterCrashlytics._internal();
 
-  /// Initialises the Crashlytics plugin.
+  /// Initializes the Crashlytics plugin.
   /// If you want to opt in into sending the reports please first call this method.
-  Future<void> initialise() async => await _channel.invokeMethod('initialise');
+  Future<void> initialize() async => await _channel.invokeMethod('initialize');
 
   /// Reports an Error to Craslytics.
   /// A good rule of thumb is not to catch Errors as those are errors that occur
@@ -26,8 +26,8 @@ class FlutterCrashlytics {
       {bool forceCrash = false}) async {
     final data = {
       'message': details.exception.toString(),
-      'cause': _cause(details.stack),
-      'trace': _traces(details.stack),
+      'cause': details.stack == null ? 'unknown' : _cause(details.stack),
+      'trace': details.stack == null ? [] : _traces(details.stack),
       'forceCrash': forceCrash
     };
 
@@ -38,8 +38,8 @@ class FlutterCrashlytics {
       {bool forceCrash = false}) async {
     final data = {
       'message': error.toString(),
-      'cause': _cause(stackTrace),
-      'trace': _traces(stackTrace),
+      'cause': stackTrace == null ? 'unknown' : _cause(stackTrace),
+      'trace': stackTrace == null ? [] : _traces(stackTrace),
       'forceCrash': forceCrash
     };
 
@@ -85,12 +85,11 @@ class FlutterCrashlytics {
     final List<String> tokens = frame.member.split('.');
 
     return {
-      'library': frame.library,
-      'line': frame.line,
+      'library': frame.library ?? 'unknown',
+      'line': frame.line ?? 0,
       // Global function might have thrown the exception.
       // So in some cases the method is the first token
-      'method': tokens.length == 1 ? tokens[0] : tokens.sublist(1).join(
-          '.'),
+      'method': tokens.length == 1 ? tokens[0] : tokens.sublist(1).join('.'),
       // Global function might have thrown the exception.
       // So in some cases class does not exist
       'class': tokens.length == 1 ? null : tokens[0],

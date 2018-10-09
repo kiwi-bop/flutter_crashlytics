@@ -1,3 +1,8 @@
+## 0.1.0
+* Breaking change, now initialize method need to be called in order to init Fabric (GDPR compliance)
+* fix crash when stacktrace is null for some reason...
+* fix crash when line number is null
+
 ## 0.0.6
 
 * add manual log for Error/Exception

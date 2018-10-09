@@ -18,11 +18,12 @@ func CLS_LOG_SWIFT(msg: String, _ args:[CVarArg] = [])
 
 public class SwiftFlutterCrashlyticsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
-        Fabric.with([Crashlytics.self])
         let channel = FlutterMethodChannel(name: "flutter_crashlytics", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterCrashlyticsPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
+    
+    var isFabricInitialized = false
     
     private func buildStackTrace(traces: Array<Dictionary<String, Any>>?) -> [CLSStackFrame] {
         var stacks = [CLSStackFrame]()
@@ -44,6 +45,19 @@ public class SwiftFlutterCrashlyticsPlugin: NSObject, FlutterPlugin {
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if call.method == "initialize" {
+            Fabric.with([Crashlytics.self])
+            isFabricInitialized = true
+            result(nil)
+        } else if(isFabricInitialized) {
+            onInitialisedMethodCall(call, result: result)
+        } else {
+            // Should not result in an error. Otherwise Opt Out clients would need to handle errors
+            result(nil)
+        }
+    }
+    
+    private func onInitialisedMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let crashlytics = Crashlytics.sharedInstance()
         
         switch call.method {
