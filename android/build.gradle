@@ -2,7 +2,7 @@ group 'com.kiwi.fluttercrashlytics'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.2.61'
+    ext.kotlin_version = '1.2.71'
     repositories {
         google()
         jcenter()
@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    api('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+    api('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
