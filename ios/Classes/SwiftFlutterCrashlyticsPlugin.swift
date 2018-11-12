@@ -88,7 +88,7 @@ public class SwiftFlutterCrashlyticsPlugin: NSObject, FlutterPlugin {
             break
         case "setInfo":
             let info = call.arguments as! Dictionary<String, Any>
-            crashlytics.setValue(info["value"], forKey: info["key"] as! String)
+            crashlytics.setObjectValue(info["value"], forKey: info["key"] as! String)
             result(nil)
             break
         case "setUserInfo":
