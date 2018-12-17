@@ -7,13 +7,14 @@ import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 void main() async {
   bool isInDebugMode = false;
   profile((){
-    isInDebugMode=true;
+   // isInDebugMode=true;
   });
 
   FlutterError.onError = (FlutterErrorDetails details) {
     if (isInDebugMode) {
       // In development mode simply print to console.
       FlutterError.dumpErrorToConsole(details);
+      Zone.current.handleUncaughtError(details.exception, details.stack);
     } else {
       // In production mode report to the application zone to report to
       // Crashlytics.
@@ -35,7 +36,7 @@ void main() async {
     // Whenever an error occurs, call the `reportCrash` function. This will send
     // Dart errors to our dev console or Crashlytics depending on the environment.
     debugPrint(error.toString());
-    await FlutterCrashlytics().reportCrash(error, stackTrace, forceCrash: false);
+    await FlutterCrashlytics().reportCrash(error, stackTrace, forceCrash: true);
   });
 }
 
@@ -59,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: RaisedButton(
                 onPressed: () {
-                  final crash = List()[222];
+                  final crash = List()[125];
                   debugPrint(crash);
                 },
                 child: Text('Crash'),
@@ -69,7 +70,7 @@ class _MyAppState extends State<MyApp> {
               child: RaisedButton(
                 onPressed: () {
                   try {
-                    final crash = List()[555];
+                    final crash = List()[1555];
                     debugPrint(crash);
                   } catch (error) {
                     debugPrint(error.toString());

@@ -79,10 +79,11 @@ public class SwiftFlutterCrashlyticsPlugin: NSObject, FlutterPlugin {
             break
         case "log":
             if (call.arguments is String) {
-                CLS_LOG_SWIFT(msg: "%@", [call.arguments as! String])
+                CLSLogv("%@", getVaList([call.arguments as! String]))
+            
             } else {
                 let info = call.arguments as! Array<Any>
-                CLS_LOG_SWIFT(msg: "%d: %@ %@", [info[0] as! Int, info[1] as! String, info[2] as! String])
+                CLSLogv("%d: %@ %@", getVaList([info[0] as! Int, info[1] as! String, info[2] as! String]))
             }
             result(nil)
             break
