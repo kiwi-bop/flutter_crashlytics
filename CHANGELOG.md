@@ -1,3 +1,7 @@
+## 0.1.3
+
+* Dependencies updated (crashlytics 2.9.7, gradle 3.2.1, kotlin 1.3.11)
+
 ## 0.1.0
 * Breaking change, now initialize method need to be called in order to init Fabric (GDPR compliance)
 * fix crash when stacktrace is null for some reason...
