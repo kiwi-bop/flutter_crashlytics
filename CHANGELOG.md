@@ -1,3 +1,9 @@
+## 0.1.3
+* fix android background execution
+
+## 0.1.2
+* fix iOS custom log
+
 ## 0.1.0
 * Breaking change, now initialize method need to be called in order to init Fabric (GDPR compliance)
 * fix crash when stacktrace is null for some reason...
