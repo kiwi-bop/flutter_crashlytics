@@ -1,7 +1,8 @@
 package com.kiwi.fluttercrashlytics
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import io.flutter.plugin.common.MethodCall
@@ -10,13 +11,12 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-
-class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandler {
+class FlutterCrashlyticsPlugin(private val context: Context) : MethodCallHandler {
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "flutter_crashlytics")
-            channel.setMethodCallHandler(FlutterCrashlyticsPlugin(registrar.activity()))
+            channel.setMethodCallHandler(FlutterCrashlyticsPlugin(registrar.context()))
         }
     }
 
@@ -86,9 +86,10 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
                     //Start a new activity to not crash directly under onMethod call, or it will crash JNI instead of a clean exception
                     val intent = Intent(context, CrashActivity::class.java).apply {
                         putExtra("exception", throwable)
+                        flags = FLAG_ACTIVITY_NEW_TASK
                     }
 
-                    context.startActivityForResult(intent, -1)
+                    context.startActivity(intent)
                 } else {
                     core.logException(throwable)
                 }
