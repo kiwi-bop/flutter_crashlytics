@@ -1,3 +1,6 @@
+## 0.2.0
+* move from swift to obj-c
+
 ## 0.1.3
 * fix android background execution
 
@@ -32,4 +35,4 @@
 
 ## 0.0.1
 
-* initial release.
+* TODO: Describe initial release.

@@ -1,7 +1,9 @@
 name: flutter_crashlytics
 description: Flutter plugin to enable Crashlytics reporting on Android and iOS, also offer the ability to add custom log and informations to the reports.
-version: 0.1.3
-author: jaumard <jimmy@kiwi-bop.com>
+version: 0.2.0
+authors:
+- jaumard <jimmy@kiwi-bop.com>
+- long1eu <home@long1.eu>
 homepage: https://github.com/kiwi-bop/flutter_crashlytics
 
 dependencies:
