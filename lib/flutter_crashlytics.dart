@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 class FlutterCrashlytics {
-  static const MethodChannel _channel = const MethodChannel('flutter_crashlytics');
+  static const MethodChannel _channel =
+      const MethodChannel('flutter_crashlytics');
   static final FlutterCrashlytics _singleton = FlutterCrashlytics._internal();
 
   factory FlutterCrashlytics() => _singleton;
@@ -16,7 +17,7 @@ class FlutterCrashlytics {
   /// If you want to opt in into sending the reports please first call this method.
   Future<void> initialize() async => await _channel.invokeMethod('initialize');
 
-  /// Reports an Error to Craslytics.
+  /// Reports an Error to Crashlytics.
   /// A good rule of thumb is not to catch Errors as those are errors that occur
   /// in the development phase.
   ///
@@ -68,18 +69,9 @@ class FlutterCrashlytics {
   }
 
   List<Map<String, dynamic>> _traces(StackTrace stack) =>
-      Trace
-          .from(stack)
-          .frames
-          .map(_toTrace)
-          .toList(growable: false);
+      Trace.from(stack).frames.map(_toTrace).toList(growable: false);
 
-  String _cause(StackTrace stack) =>
-      Trace
-          .from(stack)
-          .frames
-          .first
-          .toString();
+  String _cause(StackTrace stack) => Trace.from(stack).frames.first.toString();
 
   Map<String, dynamic> _toTrace(Frame frame) {
     final List<String> tokens = frame.member.split('.');
@@ -95,5 +87,4 @@ class FlutterCrashlytics {
       'class': tokens.length == 1 ? null : tokens[0],
     };
   }
-
 }
