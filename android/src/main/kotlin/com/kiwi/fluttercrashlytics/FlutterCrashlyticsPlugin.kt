@@ -3,6 +3,7 @@ package com.kiwi.fluttercrashlytics
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.util.Log
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import io.flutter.plugin.common.MethodCall
@@ -46,7 +47,7 @@ class FlutterCrashlyticsPlugin(private val context: Context) : MethodCallHandler
                     core.log(call.arguments as String)
                 } else {
                     val info = call.arguments as List<Any>
-                    core.log(info[0] as Int, info[1] as String, info[2] as String)
+                    core.log(info[0].toString() + ": " + info[1] + " " + info[2])
                 }
                 result.success(null)
             }
