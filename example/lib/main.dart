@@ -74,6 +74,7 @@ class _MyAppState extends State<MyApp> {
                     debugPrint(crash);
                   } catch (error) {
                     debugPrint(error.toString());
+                    FlutterCrashlytics().log('My loogggg', priority: 200, tag: 'test');
                     FlutterCrashlytics().logException(error, error.stackTrace);
                   }
                 },
