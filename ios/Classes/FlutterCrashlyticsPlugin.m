@@ -53,7 +53,7 @@
 
         NSString *cause = exception[@"cause"] ? exception[@"cause"] : @"Flutter Error";
         NSString *message = exception[@"message"] ? exception[@"message"] : @"";
-        NSArray<NSDictionary *> *traces = exception[@"traces"];
+        NSArray<NSDictionary *> *traces = exception[@"trace"];
         BOOL forceCrash = [exception[@"forceCrash"] boolValue] ? [exception[@"forceCrash"] boolValue] : false;
         NSArray<CLSStackFrame *> *stacks = [self buildStackTrace:traces];
 
