@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 #import "Fabric.h"
 #import "Crashlytics.h"
 #import "FlutterCrashlyticsPlugin.h"
@@ -10,9 +11,9 @@
 - (instancetype)initWithName:(NSExceptionName)aName reason:(nullable NSString *)aReason frameArray:(NSArray<CLSStackFrame *> *)array {
     self = [super initWithName:aName reason:aReason userInfo:nil];
     if (self) {
-        NSMutableArray<NSString *> *data = [@[] mutableCopy];
-        for (NSUInteger i = 0; i < [frameArray count]; ++i) {
-            [data addObject:frameArray[i].description];
+        NSMutableArray<NSString *> *data = [[NSMutableArray <NSString *> alloc] initWithCapacity:frameArray.count];
+        for (NSUInteger i = 0; i < frameArray.count; ++i) {
+            [data insertObject:frameArray[i].description atIndex:i];
         }
 
         frameArray = array;
@@ -51,8 +52,8 @@
     if ([@"reportCrash" isEqualToString:call.method]) {
         NSDictionary *exception = call.arguments;
 
-        NSString *cause = exception[@"cause"] ? exception[@"cause"] : @"Flutter Error";
-        NSString *message = exception[@"message"] ? exception[@"message"] : @"";
+        NSString *cause = [self getValueForKey:@"cause" from:exception orDefaultTo:@"Flutter Error"];
+        NSString *message = [self getValueForKey:@"message" from:exception orDefaultTo:@""];
         NSArray<NSDictionary *> *traces = exception[@"trace"];
         BOOL forceCrash = [exception[@"forceCrash"] boolValue] ? [exception[@"forceCrash"] boolValue] : false;
         NSArray<CLSStackFrame *> *stacks = [self buildStackTrace:traces];
@@ -91,26 +92,37 @@
     }
 }
 
+- (NSString *)getValueForKey:(NSString *)key from:(NSDictionary *)dictionary orDefaultTo:(NSString *)defaultValue {
+    NSString *value = dictionary[key];
+    /// Dart [null] returns nil or NSNull when nested.
+    if (value != nil && ![value isEqual:[NSNull null]]) {
+        return value;
+    } else {
+        return defaultValue;
+    }
+}
+
 - (NSArray<CLSStackFrame *> *)buildStackTrace:(NSArray<NSDictionary *> *)traces {
-    NSMutableArray<CLSStackFrame *> *stacks = [[NSMutableArray alloc] init];
+    NSMutableArray<CLSStackFrame *> *stacks = [[NSMutableArray<CLSStackFrame *> alloc] initWithCapacity:traces.count];
 
     for (NSUInteger i = 0; i < traces.count; i++) {
         NSDictionary *trace = traces[i];
-        NSString *className = trace[@"class"] ? trace[@"class"] : @"";
-        NSString *methodName = trace[@"method"] ? trace[@"class"] : @"";
-        NSString *libraryName = trace[@"library"] ? trace[@"class"] : @"";
 
-        CLSStackFrame *frame = [[CLSStackFrame alloc] init];
-        [frame setSymbol:[NSString stringWithFormat:@"%@.%@", className, methodName]];
+        NSString *className = [self getValueForKey:@"class" from:trace orDefaultTo:@""];
+        NSString *methodName = [self getValueForKey:@"method" from:trace orDefaultTo:@""];
+        NSString *libraryName = [self getValueForKey:@"library" from:trace orDefaultTo:@""];
+        NSString *symbol = [NSString stringWithFormat:@"%@.%@", className, methodName];
+
+        CLSStackFrame *frame = [CLSStackFrame stackFrameWithSymbol:symbol];
         [frame setLibrary:className];
         [frame setRawSymbol:className];
         [frame setFileName:libraryName];
 
-        if (trace[@"line"]) {
+        if (trace[@"line"] != nil && ![trace[@"line"] isEqual:[NSNull null]]) {
             [frame setLineNumber:(uint32_t) trace[@"line"]];
         }
 
-        [stacks addObject:frame];
+        [stacks insertObject:frame atIndex:i];
     }
 
     return stacks;
