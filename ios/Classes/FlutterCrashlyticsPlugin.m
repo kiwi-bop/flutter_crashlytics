@@ -131,11 +131,13 @@
 - (void)crash:(NSString *)cause reason:(NSString *)reason frames:(NSArray<CLSStackFrame *> *)frameArray {
 
     CLSLog(@"%@ %@", cause, reason);
-
+    NSMutableString *stack = [NSMutableString string];
     for (NSUInteger i = 0; i < [frameArray count]; ++i) {
-        CLSLog(@"%@", frameArray[i].description);
+        [stack appendString: frameArray[i].description];
+        [stack appendString: @"\n"];
     }
-
+    CLSLog(@"%@", stack);
+    
     FlutterException *ex = [[FlutterException alloc] initWithName:cause reason:reason frameArray:frameArray];
 
     [ex raise];

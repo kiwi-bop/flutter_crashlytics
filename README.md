@@ -42,7 +42,7 @@ Nothing more.
 
 ### iOS
 On iOS side your need to set your Fabric ID under your Info.plist like: 
-(Only do this if using Fabric, not firebase as you will not have an Api Key)
+(Only do this if using Fabric, not Firebase as you will not have an Api Key)
 ```
 <key>Fabric</key>
     <dict>
@@ -66,10 +66,8 @@ Key: firebase_crashlytics_collection_enabled
 
 Value: false
 
-
-Then on your Podfile add `use_frameworks!`
-
-Don't forget to add your `Run Script` step (with any version of Xcode) on the build phases tab and, if using `Xcode 10`, only then must you add your app's built Info.plist location to the Build Phase's Input Files field:
+Don't forget to add your `Run Script` step (with any version of Xcode) on the build phases tab. 
+If using `Xcode 10`, you also must you add your app's built Info.plist location to the Build Phase's Input Files field:
 ```
 $(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
 ```

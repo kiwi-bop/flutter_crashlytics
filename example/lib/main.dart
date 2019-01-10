@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: RaisedButton(
                 onPressed: () {
-                  final crash = List()[125];
+                  final crash = List()[69];
                   debugPrint(crash);
                 },
                 child: Text('Crash'),
@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
               child: RaisedButton(
                 onPressed: () {
                   try {
-                    final crash = List()[1555];
+                    final crash = List()[144];
                     debugPrint(crash);
                   } catch (error) {
                     debugPrint(error.toString());
