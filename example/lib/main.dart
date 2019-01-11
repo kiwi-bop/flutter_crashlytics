@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 
 void main() async {
   bool isInDebugMode = false;
-  profile((){
-   // isInDebugMode=true;
+  profile(() {
+    // isInDebugMode=true;
   });
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: RaisedButton(
                 onPressed: () {
-                  final crash = List()[125];
+                  final crash = List()[69];
                   debugPrint(crash);
                 },
                 child: Text('Crash'),
@@ -70,10 +70,11 @@ class _MyAppState extends State<MyApp> {
               child: RaisedButton(
                 onPressed: () {
                   try {
-                    final crash = List()[1555];
+                    final crash = List()[144];
                     debugPrint(crash);
                   } catch (error) {
                     debugPrint(error.toString());
+                    FlutterCrashlytics().log('My loogggg', priority: 200, tag: 'test');
                     FlutterCrashlytics().logException(error, error.stackTrace);
                   }
                 },

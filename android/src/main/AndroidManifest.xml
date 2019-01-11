@@ -3,11 +3,11 @@
     package="com.kiwi.fluttercrashlytics">
 
     <application>
-        <activity android:name=".CrashActivity"></activity>
+        <activity android:name=".CrashActivity" />
 
         <meta-data
-                android:name="firebase_crashlytics_collection_enabled"
-                android:value="false" />
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
     </application>
 
 </manifest>
