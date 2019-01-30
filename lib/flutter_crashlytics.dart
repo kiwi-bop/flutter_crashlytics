@@ -17,6 +17,10 @@ class FlutterCrashlytics {
   /// If you want to opt in into sending the reports please first call this method.
   Future<void> initialize() async => await _channel.invokeMethod('initialize');
 
+  /// Skip Fabric SDK initialization.
+  /// Specially for hybrid projects, in which Fabric is probably initialized by the native part.
+  Future<void> skipInitialization() => _channel.invokeMethod('skipInitialization');
+
   /// Reports an Error to Crashlytics.
   /// A good rule of thumb is not to catch Errors as those are errors that occur
   /// in the development phase.

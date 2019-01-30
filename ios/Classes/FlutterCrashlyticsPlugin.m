@@ -38,6 +38,9 @@
         [Fabric with:@[[Crashlytics self]]];
         _isFabricInitialized = true;
         result(nil);
+    } else if ([@"skipInitialization" isEqualToString:call.method]) {
+        _isFabricInitialized = true;
+        result(nil);
     } else if (_isFabricInitialized) {
         [self onInitialisedMethodCall:call result:result];
     } else {
@@ -137,7 +140,7 @@
         [stack appendString: @"\n"];
     }
     CLSLog(@"%@", stack);
-    
+
     FlutterException *ex = [[FlutterException alloc] initWithName:cause reason:reason frameArray:frameArray];
 
     [ex raise];

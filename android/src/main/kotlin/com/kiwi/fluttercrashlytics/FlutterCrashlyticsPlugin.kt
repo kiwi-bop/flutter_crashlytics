@@ -28,6 +28,7 @@ class FlutterCrashlyticsPlugin(private val context: Context) : MethodCallHandler
 
                 result.success(null)
             }
+            "skipInitialization" -> result.success(null)
             else -> {
                 if (Fabric.isInitialized()) {
                     onInitialisedMethodCall(call, result)
