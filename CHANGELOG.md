@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Dependencies updated (crashlytics 2.9.8, gradle 3.3.0, kotlin 1.3.20)
+
 ## 0.2.0
 * move from swift to obj-c
 
