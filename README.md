@@ -1,5 +1,7 @@
 # flutter_crashlytics
 
+[![pub package](https://img.shields.io/pub/v/flutter_crashlytics.svg)](https://pub.dartlang.org/packages/flutter_crashlytics)
+
 Flutter plugin to enable Crashlytics reporting.
 
 ## Setup
