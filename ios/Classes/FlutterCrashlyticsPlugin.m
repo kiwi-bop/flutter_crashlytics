@@ -4,19 +4,19 @@
 #import "FlutterCrashlyticsPlugin.h"
 
 @implementation FlutterException {
-    NSArray <CLSStackFrame *> *frameArray;
     NSArray <NSString *> *callStackSymbols;
 }
 
 - (instancetype)initWithName:(NSExceptionName)aName reason:(nullable NSString *)aReason frameArray:(NSArray<CLSStackFrame *> *)array {
     self = [super initWithName:aName reason:aReason userInfo:nil];
     if (self) {
-        NSMutableArray<NSString *> *data = [[NSMutableArray <NSString *> alloc] initWithCapacity:frameArray.count];
-        for (NSUInteger i = 0; i < frameArray.count; ++i) {
-            [data insertObject:frameArray[i].description atIndex:i];
+        self.frameArray = array;
+
+        NSMutableArray<NSString *> *data = [[NSMutableArray <NSString *> alloc] initWithCapacity:self.frameArray.count];
+        for (NSUInteger i = 0; i < self.frameArray.count; ++i) {
+            [data insertObject:self.frameArray[i].description atIndex:i];
         }
 
-        frameArray = array;
         callStackSymbols = data;
     }
     return self;
