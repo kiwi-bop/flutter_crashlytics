@@ -3,6 +3,7 @@ package com.kiwi.fluttercrashlytics
 import android.app.Activity
 import android.content.Intent
 import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.ndk.CrashlyticsNdk
 import io.fabric.sdk.android.Fabric
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -23,7 +24,7 @@ class FlutterCrashlyticsPlugin(private val context: Activity) : MethodCallHandle
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             "initialize" -> {
-                Fabric.with(context, Crashlytics())
+                Fabric.with(context, Crashlytics(), CrashlyticsNdk())
 
                 result.success(null)
             }
