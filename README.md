@@ -40,7 +40,7 @@ And apply the fabric plugin `apply plugin: 'io.fabric'`
 
 Nothing more.
 
-## Symbolicating Native Android Crashes
+### Symbolicating Native Android Crashes
 
 Unfortunately, even pure Dart projects can't always protect you from native
 crashes.  Without the following setup, a native crash like SIGSEGV will
@@ -74,7 +74,7 @@ cp -R ./build/app/intermediates/transforms/mergeJniLibs/release/0/lib debugSymbo
 # The libflutter.so here matches the artifacts.zip found with symbols.zip
 cd debugSymbols/armeabi-v7a
 
-# Download our corresponding libflutter.so with debug symbols
+# Download the corresponding libflutter.so with debug symbols
 gsutil cp gs://flutter_infra/flutter/`cat $HOME/flutter/bin/internal/engine.version`/android-arm-release/symbols.zip .
 
 # Replace libflutter.so
