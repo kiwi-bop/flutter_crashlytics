@@ -59,7 +59,7 @@ crashlytics {
 Ensure that the ndk-bundle is installed or the stripDebugSymbol directory won't
 get created.
 
-Now setup a release script to populate the debugSymbols directory, following
+Now setup a release script to populate the debugSymbols directory, guided by
 the instructions from https://github.com/flutter/flutter/wiki/Crashes
 
 ```
@@ -75,7 +75,8 @@ cp -R ./build/app/intermediates/transforms/mergeJniLibs/release/0/lib debugSymbo
 cd debugSymbols/armeabi-v7a
 
 # Download the corresponding libflutter.so with debug symbols
-gsutil cp gs://flutter_infra/flutter/`cat $HOME/flutter/bin/internal/engine.version`/android-arm-release/symbols.zip .
+ENGINE_VERSION=`cat $HOME/flutter/bin/internal/engine.version`
+gsutil cp gs://flutter_infra/flutter/${ENGINE_VERSION}/android-arm-release/symbols.zip .
 
 # Replace libflutter.so
 unzip -o symbols.zip
