@@ -57,34 +57,32 @@ public class FlutterCrashlyticsPlugin implements MethodChannel.MethodCallHandler
         }
 
         if (call.method.equals("setInfo")) {
-            final Map<String, Object> info = (Map<String, Object>) call.arguments;
-            final Object currentInfo = info.get("value");
+            final Object currentInfo = call.argument("value");
             if (currentInfo instanceof String) {
-                core.setString((String) info.get("key"), info.get("value").toString());
+                core.setString((String) call.argument("key"), (String) call.argument("value"));
             }
             if (currentInfo instanceof Integer) {
-                core.setInt((String) info.get("key"), (Integer) info.get("value"));
+                core.setInt((String) call.argument("key"), (Integer) call.argument("value"));
             }
             if (currentInfo instanceof Double) {
-                core.setDouble((String) info.get("key"), (Double) info.get("value"));
+                core.setDouble((String) call.argument("key"), (Double) call.argument("value"));
             }
             if (currentInfo instanceof Boolean) {
-                core.setBool((String) info.get("key"), (Boolean) info.get("value"));
+                core.setBool((String) call.argument("key"), (Boolean) call.argument("value"));
             }
             if (currentInfo instanceof Float) {
-                core.setFloat((String) info.get("key"), (Float) info.get("value"));
+                core.setFloat((String) call.argument("key"), (Float) call.argument("value"));
             }
             if (currentInfo instanceof Long) {
-                core.setLong((String) info.get("key"), (Long) info.get("value"));
+                core.setLong((String) call.argument("key"), (Long) call.argument("value"));
             }
             result.success(null);
         }
 
         if (call.method.equals("setUserInfo")) {
-            final Map<String, String> info = (Map<String, String>) call.arguments;
-            core.setUserEmail(info.get("email"));
-            core.setUserName(info.get("name"));
-            core.setUserIdentifier(info.get("id"));
+            core.setUserEmail((String) call.argument("email"));
+            core.setUserName((String) call.argument("name"));
+            core.setUserIdentifier((String) call.argument("id"));
             result.success(null);
         }
 
