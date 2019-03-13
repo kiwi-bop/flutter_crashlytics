@@ -2,7 +2,7 @@ package com.kiwi.fluttercrashlytics;
 
 import java.io.Serializable;
 
-class FlutterException extends Throwable implements Serializable {
+class FlutterException extends RuntimeException implements Serializable {
 
     private String message;
 
@@ -12,10 +12,6 @@ class FlutterException extends Throwable implements Serializable {
 
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     @Override

@@ -12,7 +12,7 @@ public class CrashActivity extends Activity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
 
-        throw (RuntimeException) getIntent().getSerializableExtra("exception");
+        throw (FlutterException) getIntent().getSerializableExtra("exception");
 
     }
 }
