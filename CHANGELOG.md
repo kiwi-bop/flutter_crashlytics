@@ -1,3 +1,8 @@
+## 0.3.0
+
+* Switch from kotlin to java
+* Add possibility to have Android NDK crashes
+
 ## 0.2.1+1
 
 * Reduce iOS compiler warnings
