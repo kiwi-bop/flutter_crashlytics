@@ -25,6 +25,7 @@ void main() async {
   bool optIn = true;
   if (optIn) {
     await FlutterCrashlytics().initialize();
+    FlutterCrashlytics().setUserInfo('test1', 'test@test.com', 'tester');
   } else {
     // In this case Crashlytics won't send any reports.
     // Usually handling opt in/out is required by the Privacy Regulations
