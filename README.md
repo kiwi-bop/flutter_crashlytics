@@ -42,6 +42,58 @@ And apply the fabric plugin `apply plugin: 'io.fabric'`
 
 Nothing more.
 
+### Symbolicating Native Android Crashes
+Unfortunately, even pure Dart projects can't always protect you from native
+crashes.  Without the following setup, a native crash like SIGSEGV will
+appear as a blank stacktrace in Crashlytics.  Here's how to get some symbols:
+
+Add the following to build.gradle, after `apply plugin: 'io.fabric'`:
+
+```
+crashlytics {
+    enableNdk true
+    androidNdkOut "../../debugSymbols"
+    androidNdkLibsOut "../../build/app/intermediates/transforms/stripDebugSymbol/release/0/lib"
+}
+```
+
+Ensure that the ndk-bundle is installed or the stripDebugSymbol directory won't
+get created.
+
+Now setup a release script to populate the debugSymbols directory, guided by
+the instructions from https://github.com/flutter/flutter/wiki/Crashes
+
+```
+# Build our app like usual
+flutter -v build apk --release
+
+### BEGIN MODIFICATIONS
+
+# Copy mergeJniLibs to debugSymbols
+cp -R ./build/app/intermediates/transforms/mergeJniLibs/release/0/lib debugSymbols
+
+# The libflutter.so here is the same as in the artifacts.zip found with symbols.zip
+cd debugSymbols/armeabi-v7a
+
+# Download the corresponding libflutter.so with debug symbols
+ENGINE_VERSION=`cat $HOME/flutter/bin/internal/engine.version`
+gsutil cp gs://flutter_infra/flutter/${ENGINE_VERSION}/android-arm-release/symbols.zip .
+
+# Replace libflutter.so
+unzip -o symbols.zip
+rm -rf symbols.zip
+
+# Upload symbols to Crashlytics
+cd ../../android
+./gradlew crashlyticsUploadSymbolsRelease
+
+### END MODIFICATIONS
+
+# Release our app like usual
+cd ../..
+fastlane submit_playalpha
+```
+
 ### iOS
 On iOS side your need to set your Fabric ID under your Info.plist like: 
 (Only do this if using Fabric, not Firebase as you will not have an Api Key)

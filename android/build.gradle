@@ -37,4 +37,7 @@ dependencies {
     api('com.crashlytics.sdk.android:crashlytics:2.9.8@aar') {
         transitive = true
     }
+    api('com.crashlytics.sdk.android:crashlytics-ndk:2.0.5@aar') {
+        transitive = true
+    }
 }
