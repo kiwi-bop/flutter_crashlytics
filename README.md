@@ -8,21 +8,21 @@ Flutter plugin to enable Crashlytics reporting.
 
 ### Firebase Crashlytics
 
-If using Firebase instead of Fabric, you must first setup your app to use firebase as per this tutorial
+If you're using Firebase instead of Fabric, you must first setup your app to use Firebase as per this tutorial.
 https://codelabs.developers.google.com/codelabs/flutter-firebase/#4
 
-The instructions are the same for Fabric and Firebase, except that for Firebase, you do not get an Api key so you do not have to add it anywhere.
+The instructions are the same for Fabric and Firebase, except that for Firebase, you don't get an API key so you don't have to add it anywhere.
 
 ### Android
-To setup Crashlytics on Android side, you need to set under your manifest the Fabric ID like: 
-(Only do this if using Fabric, not firebase as you will not have an Api Key)
+To setup Crashlytics on Android side, you need to set the Fabric ID in your manifest like this: 
+(Only do this if using Fabric, not Firebase as you will not have an API Key)
 ```
  <meta-data
             android:name="io.fabric.ApiKey"
             android:value="YOUR_ID_HERE" />
 ```
 
-You also need to change you build.gradle file like: 
+You also need to change your build.gradle file like this: 
 
 ```
 buildscript {
@@ -44,8 +44,8 @@ Nothing more.
 
 ### Symbolicating Native Android Crashes
 Unfortunately, even pure Dart projects can't always protect you from native
-crashes.  Without the following setup, a native crash like SIGSEGV will
-appear as a blank stacktrace in Crashlytics.  Here's how to get some symbols:
+crashes. Without the following setup, a native crash like SIGSEGV will
+appear as a blank stacktrace in Crashlytics. Here's how to get some symbols:
 
 Add the following to build.gradle, after `apply plugin: 'io.fabric'`:
 
@@ -57,7 +57,7 @@ crashlytics {
 }
 ```
 
-Ensure that the ndk-bundle is installed or the stripDebugSymbol directory won't
+Ensure that the NDK bundle is installed or the stripDebugSymbol directory won't
 get created.
 
 Now setup a release script to populate the debugSymbols directory, guided by
@@ -89,14 +89,14 @@ cd ../../android
 
 ### END MODIFICATIONS
 
-# Release our app like usual
+# Release your app like usual
 cd ../..
 fastlane submit_playalpha
 ```
 
 ### iOS
-On iOS side your need to set your Fabric ID under your Info.plist like: 
-(Only do this if using Fabric, not Firebase as you will not have an Api Key)
+On iOS side you need to set your Fabric ID under your Info.plist like: 
+(Only do this if using Fabric, not Firebase as you will not have an API Key)
 ```
 <key>Fabric</key>
     <dict>
@@ -121,7 +121,7 @@ Key: firebase_crashlytics_collection_enabled
 Value: false
 
 Don't forget to add your `Run Script` step (with any version of Xcode) on the build phases tab. 
-If using `Xcode 10`, you also must you add your app's built Info.plist location to the Build Phase's Input Files field:
+If using `Xcode 10`, you also must add your app's built Info.plist location to the Build Phase's Input Files field:
 ```
 $(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
 ```
@@ -163,20 +163,20 @@ void main() async {
 }
 ```
 
-`forceCrash` allow you to have a real crash instead of the red screen, in that case the exception will tagged as fatal 
+`forceCrash` allows you to have a real crash instead of the red screen, in that case the exception will be tagged as fatal.
 
 ## API available
 - Add log to crash reporting with `log(String msg, {int priority, String tag})`
 - Add manual log to crash reporting with `logException(Error/Exception exception, Stacktrace stack)`
 - Add user info to crash reporting with `setUserInfo(String identifier, String email, String name)`
-- Add general info to crash reporting with  `setInfo(String key, dyncamic value)`
+- Add general info to crash reporting with `setInfo(String key, dyncamic value)`
 
 ## Limitation 
-This plugin uses Crashlytics sdk to log manually dart crashes, all manual logged crashes are tagged as non fatal under Crashlytics, that's a limitation of the SDK.
+This plugin uses Crashlytics SDK to log manual dart crashes, all manually logged crashes are tagged as non fatal under Crashlytics, that's a limitation of the SDK.
 
-You can bypass that limitation with the `forceCrash` parameter, instead of the red screen an actual crash will append, the crash will be tagged as Fatal.
+You can bypass that limitation with the `forceCrash` parameter, instead of the red screen an actual crash will be appended, the crash will be tagged as fatal.
 
-On iOS fatal crash has there dart stacktrace under the `Logs` tab of Crashlytics, that's a limitation of iOS that prevent developers to set a custom stacktrace to an exception. 
+On iOS fatal crash has their dart stacktrace under the `Logs` tab of Crashlytics, that's a limitation of iOS that prevents developers to set a custom stacktrace to an exception. 
 
 ## Contribution
 We love contributions! Don't hesitate to open issues and make pull request to help improve this plugin.
