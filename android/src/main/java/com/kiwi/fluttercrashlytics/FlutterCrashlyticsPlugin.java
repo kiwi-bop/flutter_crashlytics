@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.crashlytics.android.ndk.CrashlyticsNdk;
 import io.fabric.sdk.android.Fabric;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -30,7 +29,7 @@ public class FlutterCrashlyticsPlugin implements MethodChannel.MethodCallHandler
     @Override
     public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
         if (methodCall.method.equals("initialize")) {
-            Fabric.with(context, new Crashlytics(), new CrashlyticsNdk());
+            Fabric.with(context, new Crashlytics());
             result.success(null);
         } else {
             if (Fabric.isInitialized()) {
