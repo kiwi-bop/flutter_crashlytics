@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.3.2'
     }
 }
 
@@ -26,7 +26,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    api('com.crashlytics.sdk.android:crashlytics:2.9.8@aar') {
+    api('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
     api('com.crashlytics.sdk.android:crashlytics-ndk:2.0.5@aar') {
