@@ -1,3 +1,8 @@
+## 1.0.0
+
+* Migrate to android X
+* Fix line number on iOS
+
 ## 0.3.0
 
 * Switch from kotlin to java
