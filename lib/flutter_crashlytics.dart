@@ -5,11 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 class FlutterCrashlytics {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_crashlytics');
-  static final FlutterCrashlytics _singleton = FlutterCrashlytics._internal();
+  static const MethodChannel _channel = MethodChannel('flutter_crashlytics');
+  static FlutterCrashlytics _singleton;
 
-  factory FlutterCrashlytics() => _singleton;
+  factory FlutterCrashlytics() {
+    _singleton ??= FlutterCrashlytics._internal();
+    return _singleton;
+  }
 
   FlutterCrashlytics._internal();
 
